@@ -1,0 +1,40 @@
+#!/bin/bash
+# 0.2
+
+# exit as soon as a test fails
+#set -e
+
+if git rev-parse --verify HEAD >/dev/null 2>&1; then
+    against=HEAD
+else
+    # Initial commit: diff against an empty tree object
+    against=$(git hash-object -t tree /dev/null)
+fi
+
+# If you want to allow non-ASCII filenames set this variable to true.
+allownonascii=$(git config --bool hooks.allownonascii)
+
+# Redirect output to stderr.
+exec 1>&2
+
+
+validate_jenkinsfile() {
+    jenkinsfiles=$(find . -type f -iname "Jenkinsfile" | xargs git diff --cached --name-only $against)
+    if [ -n "$jenkinsfiles" ]; then
+        for jenkinsfile in "$jenkinsfiles"; do
+            validate_jenkinsfile.sh $jenkinsfile
+        done
+    fi
+}
+
+validate_jinja() {
+    files=$(find . -type f -iname "*.yaml" -o -iname "*.yml" -o -iname "*.j2" | xargs git diff --cached --name-only $against)
+    if [ -n "$files" ]; then
+        for file in "$files"; do
+            validate_jinja.py $jfile
+        done
+    fi
+}
+
+validate_jenkinsfile
+validate_jinja
