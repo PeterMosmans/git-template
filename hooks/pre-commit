@@ -32,16 +32,19 @@ validate_jinja() {
 }
 
 validate_python() {
-    if [[ $1 =~ ".py" ]]; then
-        pylint $file || pylint-exit --error-fail $?
-    fi
-    }
+    [[ $1 =~ ".py" ]] && pylint $file || pylint-exit --error-fail $?
+}
+
+validate_rst() {
+    [[ $file =~ "*.rst" ]] || [[ $file =~ "*.rest" ]] && rst-lint $file
+}
 
 validate_files() {
     for file in $(git diff --cached --name-only $against); do
         validate_jenkinsfile $file
         validate_jinja $file
         validate_python $file
+        validate_rst $file
     done
 }
 
