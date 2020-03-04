@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# 0.2
+# 0.3
 
 # exit as soon as a test fails
-#set -e
+set -e
 
 if git rev-parse --verify HEAD >/dev/null 2>&1; then
     against=HEAD
@@ -31,10 +31,17 @@ validate_jinja() {
     fi
 }
 
+validate_python() {
+    if [[ $1 =~ ".py" ]]; then
+        pylint $file || pylint-exit --error-fail $?
+    fi
+    }
+
 validate_files() {
     for file in $(git diff --cached --name-only $against); do
         validate_jenkinsfile $file
         validate_jinja $file
+        validate_python $file
     done
 }
 
