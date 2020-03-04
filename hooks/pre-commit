@@ -19,16 +19,11 @@ exec 1>&2
 
 
 validate_jenkinsfile() {
-    if [[ $1 =~ "Jenkinsfile" ]]; then
-        lint-jenkins.sh $file
-    fi
+    [[ $1 =~ "Jenkinsfile" ]] && lint-jenkins.sh $file
 }
 
 validate_jinja() {
-    if [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]]; then
-        echo "Validating YAML file $file"
-        validate_jinja.py $file
-    fi
+    [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]] && validate_jinja.py $file
 }
 
 validate_python() {
