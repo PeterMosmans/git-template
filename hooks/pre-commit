@@ -46,6 +46,13 @@ validate_rst() {
     fi
 }
 
+validate_xml() {
+    if [[ $file =~ "*.xml" ]]; then
+        echo "Validating XML file $file"
+        xmllint --valid $file
+    fi
+}
+
 validate_files() {
     for file in $(git diff --cached --name-only $against); do
         validate_jenkinsfile $file
