@@ -19,19 +19,31 @@ exec 1>&2
 
 
 validate_jenkinsfile() {
-    [[ $1 =~ "Jenkinsfile" ]] && lint-jenkins.sh $file
+    if [[ $1 =~ "Jenkinsfile" ]]; then
+        echo "Validating Jenkins Groovy file $file"
+        lint-jenkins.sh $file
+    fi
 }
 
 validate_jinja() {
-    [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]] && validate_jinja.py $file
+    if [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]]; then
+        echo "Validating Jinja file $file"
+        validate_jinja.py $file
+    fi
 }
 
 validate_python() {
-    [[ $1 =~ ".py" ]] && pylint $file || pylint-exit --error-fail $?
+    if [[ $1 =~ ".py" ]]; then
+        echo "Validating Python file $file"
+        pylint $file || pylint-exit --error-fail $?
+    fi
 }
 
 validate_rst() {
-    [[ $file =~ "*.rst" ]] || [[ $file =~ "*.rest" ]] && rst-lint $file
+    if [[ $file =~ "*.rst" ]] || [[ $file =~ "*.rest" ]]; then
+        echo "Validating reStructuredText file $file"
+        rst-lint $file
+    fi
 }
 
 validate_files() {
