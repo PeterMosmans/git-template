@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# 0.3
 
 # exit as soon as a test fails
 set -e
@@ -11,17 +10,13 @@ else
     against=$(git hash-object -t tree /dev/null)
 fi
 
-# If you want to allow non-ASCII filenames set this variable to true.
-allownonascii=$(git config --bool hooks.allownonascii)
-
 # Redirect output to stderr.
 exec 1>&2
-
 
 validate_jenkinsfile() {
     if [[ $1 =~ "Jenkinsfile" ]]; then
         echo "Validating Jenkins Groovy file $file"
-        lint-jenkins.sh $file
+        lint-jenkins $file
     fi
 }
 
