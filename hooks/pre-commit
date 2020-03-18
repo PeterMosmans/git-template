@@ -48,12 +48,21 @@ validate_xml() {
     fi
 }
 
+validate_yaml() {
+    if [[ $file =~ "*.xml" ]]; then
+        echo "Validating YAML file $file"
+        yamllint --valid $file
+    fi
+}
+
 validate_files() {
     for file in $(git diff --cached --name-only $against); do
         validate_jenkinsfile $file
         validate_jinja $file
         validate_python $file
         validate_rst $file
+        validate_xml $file
+        validate_yaml $file
     done
 }
 
