@@ -19,43 +19,55 @@ do_prettier() {
 
 validate_jenkinsfile() {
     if [[ $1 =~ "Jenkinsfile" ]]; then
-        echo "Validating Jenkins Groovy file $file"
-        lint-jenkins $file
+        if $(which lint-jenkins &>/dev/null); then
+            echo "Validating Jenkins Groovy file $1"
+            lint-jenkins $file
+        fi
     fi
 }
 
 validate_jinja() {
-    if [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]]; then
-        echo "Validating Jinja file $file"
-        validate_jinja.py $file
+    if [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]] || [[ $1 =~ ".j2" ]]; then
+        if $(which validate_jinja &>/dev/null); then
+            echo "Validating Jinja file $1"
+            validate_jinja $file
+        fi
     fi
 }
 
 validate_python() {
     if [[ $1 =~ ".py" ]]; then
-        echo "Validating Python file $file"
-        pylint $file || pylint-exit --error-fail $?
+        if $(which pylint 2>/dev/null); then
+            echo "Validating Python file $1"
+            pylint $1 || pylint-exit --error-fail $?
+        fi
     fi
 }
 
 validate_rst() {
-    if [[ $file =~ "*.rst" ]] || [[ $file =~ "*.rest" ]]; then
-        echo "Validating reStructuredText file $file"
-        rst-lint $file
+    if [[ $1 =~ ".rst" ]] || [[ $1 =~ ".rest" ]]; then
+        if $(which rst-lint &>/dev/null); then
+            echo "Validating reStructuredText file $1"
+            rst-lint $1
+        fi
     fi
 }
 
 validate_xml() {
-    if [[ $file =~ "*.xml" ]]; then
-        echo "Validating XML file $file"
-        xmllint --valid $file
+    if [[ $file =~ ".xml" ]]; then
+        if $(which xmllint &>/dev/null); then
+            echo "Validating XML file $1"
+            xmllint --valid $1
+        fi
     fi
 }
 
 validate_yaml() {
-    if [[ $file =~ "*.xml" ]]; then
-        echo "Validating YAML file $file"
-        yamllint --valid $file
+    if [[ $file =~ ".yaml" ]]; then
+        if $(which yamllint &>/dev/null); then
+            echo "Validating YAML file $1"
+            yamllint --valid $1
+        fi
     fi
 }
 
