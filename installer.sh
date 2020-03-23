@@ -17,7 +17,7 @@ declare -A osfiles
 
 # Files to copy
 copyfiles=(
-    [.]=".commitlintrc.yml .gitlint .prettierrc.yml .versionrc"
+    [.]=".commitlintrc.yml .gitlint .prettierignore .prettierrc.yml .versionrc"
     [.git/hooks]="commit-msg pre-commit"
 )
 
