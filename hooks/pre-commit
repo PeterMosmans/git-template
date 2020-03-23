@@ -13,6 +13,10 @@ fi
 # Redirect output to stderr.
 exec 1>&2
 
+do_prettier() {
+    prettier --check $1
+}
+
 validate_jenkinsfile() {
     if [[ $1 =~ "Jenkinsfile" ]]; then
         echo "Validating Jenkins Groovy file $file"
@@ -57,6 +61,7 @@ validate_yaml() {
 
 validate_files() {
     for file in $(git diff --cached --name-only $against); do
+        do_prettier $file
         validate_jenkinsfile $file
         validate_jinja $file
         validate_python $file
