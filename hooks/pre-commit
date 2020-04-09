@@ -16,8 +16,22 @@ fi
 # Redirect output to stderr.
 exec 1>&2
 
+check_branch() {
+    # Check whether this is the master branch
+    if [ "$branch" = "master" ]; then
+        # Check whether this commit does not contain a tag
+        if [ -z "$(git tag --contains)" ]; then
+            echo "Committing directly to master branch is not allowed, except for tags"
+            exit 1
+        fi
+    fi
+}
+
 do_prettier() {
-    prettier --check $1
+    if $(which prettier &>/dev/null); then
+        echo "Performing style check of $1"
+        prettier --check $1
+    fi
 }
 
 validate_jenkinsfile() {
