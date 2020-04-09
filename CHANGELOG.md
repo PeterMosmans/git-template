@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.0](https://github.com/PeterMosmans/git-template/compare/v1.1.0...v1.2.0) (2020-04-09)
+
+
+### Features
+
+* **hooks:** check whether linter exists before linting ([fb9bc5f](https://github.com/PeterMosmans/git-template/commit/fb9bc5f259a9ef1077bf344fde0abfc69c53954c))
+* **pre-commit:** enable check for type of branch ([4402b8b](https://github.com/PeterMosmans/git-template/commit/4402b8bcb5e6e5815c59637d927ae159fd669b03))
+* **pre-commit:** prevent (non-tag) commits to master branch ([5c8c973](https://github.com/PeterMosmans/git-template/commit/5c8c9738e7e1075c59664c1e576208a2ddd6620f))
+* **pre-commit:** run hooks from anywhere ([068640e](https://github.com/PeterMosmans/git-template/commit/068640ea2d3433f5a70436e5ed44f941f7df2987))
+
+## [1.2.0](https://github.com/PeterMosmans/git-template/compare/v1.1.0...v1.2.0) (2020-04-09)
+
+
+### Features
+
+* **hooks:** check whether linter exists before linting ([fb9bc5f](https://github.com/PeterMosmans/git-template/commit/fb9bc5f259a9ef1077bf344fde0abfc69c53954c))
+* **pre-commit:** enable check for type of branch ([4402b8b](https://github.com/PeterMosmans/git-template/commit/4402b8bcb5e6e5815c59637d927ae159fd669b03))
+* **pre-commit:** prevent (non-tag) commits to master branch ([5c8c973](https://github.com/PeterMosmans/git-template/commit/5c8c9738e7e1075c59664c1e576208a2ddd6620f))
+* **pre-commit:** run hooks from anywhere ([068640e](https://github.com/PeterMosmans/git-template/commit/068640ea2d3433f5a70436e5ed44f941f7df2987))
+
 ## [1.1.0](///compare/v1.0.0...v1.1.0) (2020-03-23)
 
 
