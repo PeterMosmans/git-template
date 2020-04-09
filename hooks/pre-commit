@@ -22,11 +22,12 @@ check_branch() {
         # Check whether this commit does not contain a tag
         if [ -z "$(git tag --contains)" ]; then
             # Check whether the file isn't only CHANGELOG.md
-            if [ "$(git diff --cached --name-only|xargs)" != "CHANGELOG.md" ]
+            if [ "$(git diff --cached --name-only|xargs)" != "CHANGELOG.md" ]; then
                echo "Committing directly to master branch is not allowed, except for tags,"
                echo "or only the file CHANGELOG.md."
                echo "Bypass the pre-commit hook using the --no-verify parameter"
-            exit 1
+               exit 1
+            fi
         fi
     fi
 }

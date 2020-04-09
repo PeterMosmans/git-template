@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/PeterMosmans/git-template/compare/v1.2.0...v1.3.0) (2020-04-09)
+
+
+### Features
+
+* **pre-commit:** allow master commits for CHANGELOG.md ([eb648ae](https://github.com/PeterMosmans/git-template/commit/eb648aeb4f69de9b8e8bff80055da45079dfd987))
+
 ## [1.2.0](https://github.com/PeterMosmans/git-template/compare/v1.1.0...v1.2.0) (2020-04-09)
 
 
