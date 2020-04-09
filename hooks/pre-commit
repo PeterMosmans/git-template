@@ -100,4 +100,6 @@ validate_files() {
     done
 }
 
+check_branch
 validate_files
+popd 1>/dev/null
