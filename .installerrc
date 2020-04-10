@@ -1,0 +1,14 @@
+# Files to copy
+copyfiles=(
+    [.]=".commitlintrc.yml .gitlint .prettierignore .prettierrc.yml .versionrc"
+    [.git/hooks]="commit-msg pre-commit"
+)
+
+# OS-independent files to link
+# linkfiles=()
+
+# Files to link, depending on OS
+# osfiles=()
+
+# executables: Files that should be on the search path and accessible
+executables="lint-jenkins prettier validate_jinja"
