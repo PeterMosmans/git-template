@@ -4,7 +4,6 @@
 pushd $(git rev-parse --show-toplevel) 1>/dev/null
 # exit as soon as a test fails
 set -e
-branch="$(git rev-parse --abbrev-ref HEAD)"
 
 if git rev-parse --verify HEAD >/dev/null 2>&1; then
     against=HEAD
@@ -12,6 +11,7 @@ else
     # Initial commit: diff against an empty tree object
     against=$(git hash-object -t tree /dev/null)
 fi
+branch="$(git rev-parse --abbrev-ref $against)"
 
 # Redirect output to stderr.
 exec 1>&2
