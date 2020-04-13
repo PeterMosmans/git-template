@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/PeterMosmans/git-template/compare/v1.1.0...v1.2.0) (2020-04-13)
+
+
+### Features
+
+* **pre-commit:** add shellcheck ([bdcbd6a](https://github.com/PeterMosmans/git-template/commit/bdcbd6ab629294c1be4f2beb9d5ba58d1da720be))
+
+
+### Bug Fixes
+
+* **pre-commit:** ensure branch can be read from empty repository ([feff4d9](https://github.com/PeterMosmans/git-template/commit/feff4d96450666f820c98e655f77f88f95a7467c))
+* **pre-commit:** quote filenames ([8015f86](https://github.com/PeterMosmans/git-template/commit/8015f86ddd4712e8a7daf249174a79be97a3c605))
+* **pre-commit:** use double quotes to prevent globbing and splitting ([debdefd](https://github.com/PeterMosmans/git-template/commit/debdefdb638318fe8f805c457f25e749ca874387))
+
 ## 1.1.0 (2020-04-10)
 
 
