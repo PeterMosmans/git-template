@@ -33,73 +33,83 @@ check_branch() {
 }
 
 do_prettier() {
-    if $(which prettier &>/dev/null); then
+    if which prettier &>/dev/null; then
         echo "Performing style check of $1"
-        prettier --check $1
+        prettier --check "$1"
     fi
 }
 
 validate_jenkinsfile() {
-    if [[ $1 =~ "Jenkinsfile" ]]; then
-        if $(which lint-jenkins &>/dev/null); then
+    if [[ $1 =~ Jenkinsfile ]]; then
+        if which lint-jenkins &>/dev/null; then
             echo "Validating Jenkins Groovy file $1"
-            lint-jenkins $file
+            lint-jenkins "$file"
         fi
     fi
 }
 
 validate_jinja() {
-    if [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]] || [[ $1 =~ ".j2" ]]; then
-        if $(which validate_jinja &>/dev/null); then
+    if [[ $1 =~ .yml ]] || [[ $1 =~ .yaml ]] || [[ $1 =~ .j2 ]]; then
+        if which validate_jinja &>/dev/null; then
             echo "Validating Jinja file $1"
-            validate_jinja $file
+            validate_jinja "$file"
         fi
     fi
 }
 
 validate_python() {
-    if [[ $1 =~ ".py" ]]; then
-        if $(which pylint 2>/dev/null); then
+    if [[ $1 =~ .py ]]; then
+        if which pylint 2>/dev/null; then
             echo "Validating Python file $1"
-            pylint $1 || pylint-exit --error-fail $?
+            pylint "$1" || pylint-exit --error-fail $?
         fi
     fi
 }
 
 validate_rst() {
-    if [[ $1 =~ ".rst" ]] || [[ $1 =~ ".rest" ]]; then
-        if $(which rst-lint &>/dev/null); then
+    if [[ $1 =~ .rst ]] || [[ $1 =~ .rest ]]; then
+        if which rst-lint &>/dev/null; then
             echo "Validating reStructuredText file $1"
-            rst-lint $1
+            rst-lint "$1"
+        fi
+    fi
+}
+
+validate_shell() {
+    if [[ $1 =~ .bash ]] || [[ $1 =~ .sh ]]; then
+        if which shellcheck &>/dev/null; then
+            echo "Validating shell script file $1"
+            shellcheck "$1"
         fi
     fi
 }
 
 validate_xml() {
-    if [[ $file =~ ".xml" ]]; then
-        if $(which xmllint &>/dev/null); then
+    if [[ $file =~ .xml ]]; then
+        if which xmllint &>/dev/null; then
             echo "Validating XML file $1"
-            xmllint --valid $1
+            xmllint --valid "$1"
         fi
     fi
 }
 
 validate_yaml() {
-    if [[ $file =~ ".yaml" ]]; then
-        if $(which yamllint &>/dev/null); then
+    if [[ $file =~ .yaml ]]; then
+        if which yamllint &>/dev/null; then
             echo "Validating YAML file $1"
-            yamllint --valid $1
+            yamllint --valid "$1"
         fi
     fi
 }
 
 validate_files() {
-    for file in $(git diff --cached --name-only $against); do
+    for file in $(git diff --cached --name-only "$against"); do
         do_prettier "$file"
         validate_jenkinsfile "$file"
         validate_jinja "$file"
         validate_python "$file"
         validate_rst "$file"
+        validate_shell "$file"
         validate_xml "$file"
         validate_yaml "$file"
     done
