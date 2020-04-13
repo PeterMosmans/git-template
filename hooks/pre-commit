@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Ensure that this hook can be executed from anywhere in the git repository
-pushd $(git rev-parse --show-toplevel) 1>/dev/null
+pushd "$(git rev-parse --show-toplevel)" 1>/dev/null
 # exit as soon as a test fails
 set -e
 
@@ -11,7 +11,7 @@ else
     # Initial commit: diff against an empty tree object
     against=$(git hash-object -t tree /dev/null)
 fi
-branch="$(git rev-parse --abbrev-ref $against)"
+branch=$(git rev-parse --abbrev-ref "$against")
 
 # Redirect output to stderr.
 exec 1>&2
