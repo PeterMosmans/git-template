@@ -41,7 +41,9 @@ check_branch() {
             if [ "$(git diff --cached --name-only|xargs)" != "CHANGELOG.md" ]; then
                echo "Committing directly to master branch is not allowed, except for tags,"
                echo "or only the file CHANGELOG.md."
-               echo "Bypass the pre-commit hook using the --no-verify parameter"
+               echo "Bypass the pre-commit hook using the --no-verify parameter, or"
+               echo "add the following string to the configuration file using:"
+               echo "echo DISABLE_CHECK_ON_MASTER=TRUE >> ${INIFILE}"
                exit 1
             fi
         fi
@@ -56,25 +58,25 @@ do_prettier() {
 }
 
 validate_jenkinsfile() {
-    if [[ $1 =~ Jenkinsfile ]]; then
+    if [[ $1 =~ "Jenkinsfile" ]]; then
         if which lint-jenkins &>/dev/null; then
             echo "Validating Jenkins Groovy file $1"
-            lint-jenkins "$file"
+            lint-jenkins "$1"
         fi
     fi
 }
 
 validate_jinja() {
-    if [[ $1 =~ .yml ]] || [[ $1 =~ .yaml ]] || [[ $1 =~ .j2 ]]; then
+    if [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]] || [[ $1 =~ ".j2" ]]; then
         if which validate_jinja &>/dev/null; then
             echo "Validating Jinja file $1"
-            validate_jinja "$file"
+            validate_jinja "$1"
         fi
     fi
 }
 
 validate_python() {
-    if [[ $1 =~ .py ]]; then
+    if [[ $1 =~ ".py" ]]; then
         if which pylint 2>/dev/null; then
             echo "Validating Python file $1"
             pylint "$1" || pylint-exit --error-fail $?
@@ -83,7 +85,7 @@ validate_python() {
 }
 
 validate_rst() {
-    if [[ $1 =~ .rst ]] || [[ $1 =~ .rest ]]; then
+    if [[ $1 =~ ".rst" ]] || [[ $1 =~ ".rest" ]]; then
         if which rst-lint &>/dev/null; then
             echo "Validating reStructuredText file $1"
             rst-lint "$1"
@@ -101,7 +103,7 @@ validate_shell() {
 }
 
 validate_xml() {
-    if [[ $file =~ .xml ]]; then
+    if [[ $file =~ ".xml" ]]; then
         if which xmllint &>/dev/null; then
             echo "Validating XML file $1"
             xmllint --valid "$1"
@@ -110,7 +112,7 @@ validate_xml() {
 }
 
 validate_yaml() {
-    if [[ $file =~ .yaml ]]; then
+    if [[ $file =~ ".yaml" ]]; then
         if which yamllint &>/dev/null; then
             echo "Validating YAML file $1"
             yamllint --valid "$1"
@@ -119,7 +121,7 @@ validate_yaml() {
 }
 
 validate_files() {
-    for file in $(git diff --cached --name-only "$against"); do
+    for file in $(git diff --cached --name-only "${against}"); do
         do_prettier "$file"
         validate_jenkinsfile "$file"
         validate_jinja "$file"
