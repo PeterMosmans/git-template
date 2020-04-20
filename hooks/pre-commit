@@ -1,26 +1,42 @@
 #!/usr/bin/env bash
 
-# Ensure that this hook can be executed from anywhere in the git repository
-pushd "$(git rev-parse --show-toplevel)" 1>/dev/null
+# For configuration, use the INIFILE
+INIFILE=.pre-commitrc
+
+# Search in the git root for the INIFILE
+FULLPATH=$(git rev-parse --show-toplevel 2>/dev/null)
+if [[ -n "${FULLPATH}" ]]; then
+    INIFILE="${FULLPATH}/${INIFILE}"
+    # Ensure that this hook can be executed from anywhere in the git repository
+     pushd "${FULLPATH}" 2>/dev/null
+fi
+
+# Read INI file if it exists
+[[ -f "${INIFILE}" ]] && source <(grep = "${INIFILE}")
+
+# The following parameters are supported:
+# DISABLE_CHECK_ON_MASTER=TRUE  # Allow commits to master branch
+
 # exit as soon as a test fails
 set -e
 
 if git rev-parse --verify HEAD >/dev/null 2>&1; then
+    branch="$(git rev-parse --abbrev-ref HEAD)"
     against=HEAD
+    tag="$(git tag --contains)"
 else
     # Initial commit: diff against an empty tree object
     against=$(git hash-object -t tree /dev/null)
 fi
-branch=$(git rev-parse --abbrev-ref "$against")
 
 # Redirect output to stderr.
 exec 1>&2
 
 check_branch() {
     # Check whether this is the master branch
-    if [ "$branch" = "master" ]; then
+    if [[ "${branch}" = "master" ]] && [[ -z "${DISABLE_CHECK_ON_MASTER}" ]]; then
         # Check whether this commit does not contain a tag
-        if [ -z "$(git tag --contains)" ]; then
+        if [[ -z "${tag}" ]]; then
             # Check whether the file isn't only CHANGELOG.md
             if [ "$(git diff --cached --name-only|xargs)" != "CHANGELOG.md" ]; then
                echo "Committing directly to master branch is not allowed, except for tags,"
