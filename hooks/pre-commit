@@ -58,7 +58,7 @@ do_prettier() {
 }
 
 validate_jenkinsfile() {
-    if [[ $1 =~ "Jenkinsfile" ]]; then
+    if [[ $1 =~ ^Jenkinsfile$ ]]; then
         if which lint-jenkins &>/dev/null; then
             echo "Validating Jenkins Groovy file $1"
             lint-jenkins "$1"
@@ -76,7 +76,7 @@ validate_jinja() {
 }
 
 validate_python() {
-    if [[ $1 =~ ".py" ]]; then
+    if [[ "$1" =~ \.py$ ]]; then
         if which pylint 2>/dev/null; then
             echo "Validating Python file $1"
             pylint "$1" || pylint-exit --error-fail $?
@@ -85,7 +85,7 @@ validate_python() {
 }
 
 validate_rst() {
-    if [[ $1 =~ ".rst" ]] || [[ $1 =~ ".rest" ]]; then
+    if [[ "$1" =~ \.(rest|rst)$ ]]; then
         if which rst-lint &>/dev/null; then
             echo "Validating reStructuredText file $1"
             rst-lint "$1"
@@ -94,7 +94,7 @@ validate_rst() {
 }
 
 validate_shell() {
-    if [[ $1 =~ .bash ]] || [[ $1 =~ .sh ]]; then
+    if [[ "$1" =~ \.(bash|.sh)$ ]]; then
         if which shellcheck &>/dev/null; then
             echo "Validating shell script file $1"
             shellcheck "$1"
@@ -103,7 +103,7 @@ validate_shell() {
 }
 
 validate_xml() {
-    if [[ $file =~ ".xml" ]]; then
+    if [[ "$1" =~ \.xml$ ]]; then
         if which xmllint &>/dev/null; then
             echo "Validating XML file $1"
             xmllint --valid "$1"
@@ -112,7 +112,7 @@ validate_xml() {
 }
 
 validate_yaml() {
-    if [[ $file =~ ".yaml" ]]; then
+    if [[ "$1" =~ \.(yaml|yml)$ ]]; then
         if which yamllint &>/dev/null; then
             echo "Validating YAML file $1"
             yamllint --valid "$1"
