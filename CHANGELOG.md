@@ -1,5 +1,7 @@
 # Changelog
 
+### [2.0.1](https://github.com/PeterMosmans/git-template/compare/v2.0.0...v2.0.1) (2020-04-22)
+
 ## [2.0.0](https://github.com/PeterMosmans/git-template/compare/v1.2.0...v2.0.0) (2020-04-22)
 
 
