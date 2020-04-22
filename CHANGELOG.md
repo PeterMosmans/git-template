@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.0](https://github.com/PeterMosmans/git-template/compare/v1.2.0...v2.0.0) (2020-04-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **pre-commit:** Use a less confusing and more standard name; lint-jinja.
+
+### Features
+
+* **pre-commit:** rename Jinja validator script ([7d3ecee](https://github.com/PeterMosmans/git-template/commit/7d3eceea6b7b2cdbb66b8d9bee41a527c619f46f))
+* **pre-commit:** use proper regular expressions for extensions ([a04cd7f](https://github.com/PeterMosmans/git-template/commit/a04cd7f5cbc007aee496438858aee8170b5fa31e))
+* add support for .precommitrc INIFILE ([d3c8dc9](https://github.com/PeterMosmans/git-template/commit/d3c8dc9dd0cae9aba700d48748cc0b5ac1674d16))
+* add support for .precommitrc INIFILE ([eb5d376](https://github.com/PeterMosmans/git-template/commit/eb5d37676e140ca9ecb1d8a6b4470cd61367670b))
+
 ## [1.2.0](https://github.com/PeterMosmans/git-template/compare/v1.1.0...v1.2.0) (2020-04-13)
 
 
