@@ -67,10 +67,10 @@ validate_jenkinsfile() {
 }
 
 validate_jinja() {
-    if [[ $1 =~ ".yml" ]] || [[ $1 =~ ".yaml" ]] || [[ $1 =~ ".j2" ]]; then
-        if which validate_jinja &>/dev/null; then
+    if [[ "$1" =~ \.(j2|yaml|yml)$ ]]; then
+        if which lint-jinja &>/dev/null; then
             echo "Validating Jinja file $1"
-            validate_jinja "$1"
+            lint-jinja "$1"
         fi
     fi
 }
