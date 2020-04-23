@@ -115,7 +115,7 @@ validate_yaml() {
     if [[ "$1" =~ \.(yaml|yml)$ ]]; then
         if which yamllint &>/dev/null; then
             echo "Validating YAML file $1"
-            yamllint --valid "$1"
+            yamllint --strict "$1"
         fi
     fi
 }
