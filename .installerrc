@@ -1,7 +1,7 @@
 # Files to copy
 copyfiles=(
-    [.]=".commitlintrc.yml .gitlint .prettierignore .prettierrc.yml .versionrc"
-    [.git/hooks]="commit-msg pre-commit"
+    ["."]=".commitlintrc.yml .gitlint .prettierignore .prettierrc.yml .versionrc .yamllint.yml"
+    [".git/hooks"]="commit-msg pre-commit"
 )
 
 # OS-independent files to link
