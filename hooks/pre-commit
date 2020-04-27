@@ -106,7 +106,7 @@ validate_xml() {
     if [[ "$1" =~ \.xml$ ]]; then
         if which xmllint &>/dev/null; then
             echo "Validating XML file $1"
-            xmllint --valid "$1"
+            xmllint "$1"
         fi
     fi
 }
