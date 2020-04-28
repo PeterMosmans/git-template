@@ -11,4 +11,4 @@ copyfiles=(
 # osfiles=()
 
 # executables: Files that should be on the search path and accessible
-executables="lint-jenkins prettier shellcheck lint-jinja"
+executables="doc8 lint-jenkins lint-jinja prettier shellcheck"
