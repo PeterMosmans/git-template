@@ -86,9 +86,9 @@ validate_python() {
 
 validate_rst() {
     if [[ "$1" =~ \.(rest|rst)$ ]]; then
-        if which rst-lint &>/dev/null; then
+        if which doc8 &>/dev/null; then
             echo "Validating reStructuredText file $1"
-            rst-lint "$1"
+            doc8 "$1"
         fi
     fi
 }
