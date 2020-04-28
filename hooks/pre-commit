@@ -3,16 +3,40 @@
 # For configuration, use the INIFILE
 INIFILE=.pre-commitrc
 
+declare -A verifiers
+# the INIFILE can contain an associative array containing all verifiers
+
+# Example:
+# verifiers=(
+#     ["description"]="binary;regular expression matching filetypes;prefix flags;post commands; post flags"
+#     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
+# )
+
+# These are the default verifiers:
+verifiers=(
+    ["formatting"]="prettier;.*;--check"
+    ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
+    ["Jinja"]="lint-jinja;\.(j2|yaml|yml)$"
+    ["Python"]="pylint;\.py;;pylint-exit;--error-fail $?"
+    ["reStructuredText"]="doc8; \.(rest|rst)$"
+    ["shell"]="shellcheck;\.(bash|.sh)$"
+    ["XML"]="xmllint;\.xml$"
+    ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
+)
+
 # Search in the git root for the INIFILE
 FULLPATH=$(git rev-parse --show-toplevel 2>/dev/null)
 if [[ -n "${FULLPATH}" ]]; then
     INIFILE="${FULLPATH}/${INIFILE}"
     # Ensure that this hook can be executed from anywhere in the git repository
-     pushd "${FULLPATH}" 2>/dev/null
+    pushd "${FULLPATH}" 2>/dev/null
 fi
 
 # Read INI file if it exists
-[[ -f "${INIFILE}" ]] && source <(grep = "${INIFILE}")
+if [[ -f "${INIFILE}" ]]; then
+    echo "Reading settings from ${INIFILE}"
+    source "${INIFILE}"
+fi
 
 # The following parameters are supported:
 # DISABLE_CHECK_ON_MASTER=TRUE  # Allow commits to master branch
@@ -50,89 +74,60 @@ check_branch() {
     fi
 }
 
-do_prettier() {
-    if which prettier &>/dev/null; then
-        echo "Performing style check of $1"
-        prettier --check "$1"
-    fi
-}
-
-validate_jenkinsfile() {
-    if [[ $1 =~ ^Jenkinsfile$ ]]; then
-        if which lint-jenkins &>/dev/null; then
-            echo "Validating Jenkins Groovy file $1"
-            lint-jenkins "$1"
+check_verifiers() {
+    # Check whether binaries are available
+    for verifier in "${!verifiers[@]}"; do
+        binary="$(echo ${verifiers[$verifier]}|cut -d';' -f1)"
+        post="$(echo ${verifiers[$verifier]}|cut -d';' -f4)"
+        if ! which "$binary" &>/dev/null; then
+            echo "Could not find $binary, removing $verifier verifier"
+            unset verifiers[$verifier]
         fi
-    fi
-}
-
-validate_jinja() {
-    if [[ "$1" =~ \.(j2|yaml|yml)$ ]]; then
-        if which lint-jinja &>/dev/null; then
-            echo "Validating Jinja file $1"
-            lint-jinja "$1"
+        if [[ -n $post ]] && ! which "$post" &>/dev/null; then
+           echo "Could not find $post, removing $verifier verifier"
+           unset verifiers[$verifier]
         fi
-    fi
+    done
 }
 
-validate_python() {
-    if [[ "$1" =~ \.py$ ]]; then
-        if which pylint 2>/dev/null; then
-            echo "Validating Python file $1"
-            pylint "$1" || pylint-exit --error-fail $?
+verify_file() {
+    # Loop through each verifier and apply if it matches its regexp
+    for verifier in "${!verifiers[@]}"; do
+        binary="$(echo ${verifiers[$verifier]}|cut -d';' -f1)"
+        regexp="$(echo ${verifiers[$verifier]}|cut -d';' -f2)"
+        flags="$(echo ${verifiers[$verifier]}|cut -d';' -f3)"
+        post="$(echo ${verifiers[$verifier]}|cut -d';' -f4)"
+        if [[ -n $post ]]; then
+            # Check whether post binary exists
+            if ! which "$post" &>/dev/null; then
+                echo "Could not find $post, removing $verifier verifier"
+                unset verifiers[$verifier]
+                break
+            fi
+            # If a post binary has been set, use post parameters
+            post="|| $post $(echo ${verifiers[$verifier]}|cut -d';' -f5)"
         fi
-    fi
-}
-
-validate_rst() {
-    if [[ "$1" =~ \.(rest|rst)$ ]]; then
-        if which doc8 &>/dev/null; then
-            echo "Validating reStructuredText file $1"
-            doc8 "$1"
+        if [[ "$1" =~ ${regexp} ]]; then
+            echo "Verifying $verifier of $1"
+            # Check whether binary exists
+            if ! which "$binary" &>/dev/null; then
+                echo "Could not find $binary, removing $verifier verifier"
+                unset verifiers[$verifier]
+                break
+            fi
+            $binary $flags $1 $post"
         fi
-    fi
+    done
 }
 
-validate_shell() {
-    if [[ "$1" =~ \.(bash|.sh)$ ]]; then
-        if which shellcheck &>/dev/null; then
-            echo "Validating shell script file $1"
-            shellcheck "$1"
-        fi
-    fi
-}
-
-validate_xml() {
-    if [[ "$1" =~ \.xml$ ]]; then
-        if which xmllint &>/dev/null; then
-            echo "Validating XML file $1"
-            xmllint "$1"
-        fi
-    fi
-}
-
-validate_yaml() {
-    if [[ "$1" =~ \.(yaml|yml)$ ]]; then
-        if which yamllint &>/dev/null; then
-            echo "Validating YAML file $1"
-            yamllint --strict "$1"
-        fi
-    fi
-}
-
-validate_files() {
+verify_files() {
+    # Loop through each of the files and apply the verifiers
     for file in $(git diff --cached --name-only "${against}"); do
-        do_prettier "$file"
-        validate_jenkinsfile "$file"
-        validate_jinja "$file"
-        validate_python "$file"
-        validate_rst "$file"
-        validate_shell "$file"
-        validate_xml "$file"
-        validate_yaml "$file"
+        verify_file "$file"
     done
 }
 
 check_branch
-validate_files
+verify_files
+
 popd 1>/dev/null
