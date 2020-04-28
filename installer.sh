@@ -10,6 +10,9 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
+# For configuration, use the INIFILE
+INIFILE=.installerrc
+
 # Define associative arrays
 declare -A copyfiles
 declare -A linkfiles
@@ -71,7 +74,9 @@ source=$(dirname $(readlink -f $0))
 target=$1
 
 # Read the settings
-source ${source}/.installerrc
+INIFILE="${source}/${INIFILE}"
+echo "Reading settings from ${INIFILE}"
+source ${INIFILE}
 
 usage() {
     # Check whether the script is being executed from within the source directory
