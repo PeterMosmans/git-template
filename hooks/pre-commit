@@ -115,7 +115,7 @@ verify_file() {
                 unset verifiers[$verifier]
                 break
             fi
-            $binary $flags $1 $post"
+            $binary $flags "$1" $post
         fi
     done
 }
