@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.1.0](https://github.com/PeterMosmans/git-template/compare/v2.0.1...v2.1.0) (2020-04-28)
+
+
+### Features
+
+* **installer:** make the use of installerrc file more visible ([c9c70df](https://github.com/PeterMosmans/git-template/commit/c9c70dffedf1776ff5153466140d6a2bbba1c591))
+* **installer:** replace rst-lint with doc8 ([15da912](https://github.com/PeterMosmans/git-template/commit/15da91272285dd71284ca231f1c72cc10f596a85))
+* **pre-commit:** replace rst-lint with doc8 ([2df3c85](https://github.com/PeterMosmans/git-template/commit/2df3c85ad17f71079b78dbdc1c94b0559f466f2d))
+* **yamllint:** add settings file compatible with prettier ([b0ca5a1](https://github.com/PeterMosmans/git-template/commit/b0ca5a15d2e2cd43cbc92f86ccc2ea74031962bd))
+* **yamllint:** install yamllint settings file ([25af833](https://github.com/PeterMosmans/git-template/commit/25af833a92572bd54eea041cda0f826e4a159337))
+
+
+### Bug Fixes
+
+* **hooks:** use correct yamllint flags ([f69b4d4](https://github.com/PeterMosmans/git-template/commit/f69b4d4baf01cb6dccc316b1f39cc3d6381943e6))
+* **installer:** use correct name for jinja linter ([50af153](https://github.com/PeterMosmans/git-template/commit/50af1530377f6ce84e6daf914dcbfc11bbc09b8d))
+* **pre-commit:** use correct flags for xmllint ([d927bd0](https://github.com/PeterMosmans/git-template/commit/d927bd0100aabd8df981bd54ad44d5b8aea45f80))
+
 ### [2.0.1](https://github.com/PeterMosmans/git-template/compare/v2.0.0...v2.0.1) (2020-04-22)
 
 ## [2.0.0](https://github.com/PeterMosmans/git-template/compare/v1.2.0...v2.0.0) (2020-04-22)
