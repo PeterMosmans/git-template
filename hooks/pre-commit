@@ -29,12 +29,13 @@ FULLPATH=$(git rev-parse --show-toplevel 2>/dev/null)
 if [[ -n "${FULLPATH}" ]]; then
     INIFILE="${FULLPATH}/${INIFILE}"
     # Ensure that this hook can be executed from anywhere in the git repository
-    pushd "${FULLPATH}" 2>/dev/null
+    pushd "${FULLPATH}" &>/dev/null || true
 fi
 
 # Read INI file if it exists
 if [[ -f "${INIFILE}" ]]; then
     echo "Reading settings from ${INIFILE}"
+    # shellcheck disable=SC1090
     source "${INIFILE}"
 fi
 
@@ -77,15 +78,15 @@ check_branch() {
 check_verifiers() {
     # Check whether binaries are available
     for verifier in "${!verifiers[@]}"; do
-        binary="$(echo ${verifiers[$verifier]}|cut -d';' -f1)"
-        post="$(echo ${verifiers[$verifier]}|cut -d';' -f4)"
+        binary="$(echo "${verifiers[$verifier]}"|cut -d';' -f1)"
+        post="$(echo "${verifiers[$verifier]}"|cut -d';' -f4)"
         if ! which "$binary" &>/dev/null; then
             echo "Could not find $binary, removing $verifier verifier"
-            unset verifiers[$verifier]
+            unset verifiers["$verifier"]
         fi
         if [[ -n $post ]] && ! which "$post" &>/dev/null; then
            echo "Could not find $post, removing $verifier verifier"
-           unset verifiers[$verifier]
+           unset verifiers["$verifier"]
         fi
     done
 }
@@ -93,28 +94,29 @@ check_verifiers() {
 verify_file() {
     # Loop through each verifier and apply if it matches its regexp
     for verifier in "${!verifiers[@]}"; do
-        binary="$(echo ${verifiers[$verifier]}|cut -d';' -f1)"
-        regexp="$(echo ${verifiers[$verifier]}|cut -d';' -f2)"
-        flags="$(echo ${verifiers[$verifier]}|cut -d';' -f3)"
-        post="$(echo ${verifiers[$verifier]}|cut -d';' -f4)"
+        binary="$(echo "${verifiers[$verifier]}"|cut -d';' -f1)"
+        regexp="$(echo "${verifiers[$verifier]}"|cut -d';' -f2)"
+        flags="$(echo "${verifiers[$verifier]}"|cut -d';' -f3)"
+        post="$(echo "${verifiers[$verifier]}"|cut -d';' -f4)"
         if [[ -n $post ]]; then
             # Check whether post binary exists
             if ! which "$post" &>/dev/null; then
                 echo "Could not find $post, removing $verifier verifier"
-                unset verifiers[$verifier]
+                unset verifiers["$verifier"]
                 break
             fi
             # If a post binary has been set, use post parameters
-            post="|| $post $(echo ${verifiers[$verifier]}|cut -d';' -f5)"
+            post="|| $post $(echo "${verifiers[$verifier]}"|cut -d';' -f5)"
         fi
         if [[ "$1" =~ ${regexp} ]]; then
             echo "Verifying $verifier of $1"
             # Check whether binary exists
             if ! which "$binary" &>/dev/null; then
                 echo "Could not find $binary, removing $verifier verifier"
-                unset verifiers[$verifier]
+                unset verifiers["$verifier"]
                 break
             fi
+            # shellcheck disable=SC2086
             $binary $flags "$1" $post
         fi
     done
@@ -127,6 +129,7 @@ verify_files() {
     done
 }
 
+#check_verifiers
 check_branch
 verify_files
 
