@@ -67,16 +67,22 @@ declare -A osfiles
 # This will search for lint-jenkins, and emits a warning if the file cannot be found/executed.
 # A warning will be shown if any of the files cannot be found (on the search paths)
 
-VERSION=1.0
+# shellcheck disable=SC2034
+VERSION=1.1
 
 os=$(uname -o|sed "s/\//-/")
-source=$(dirname $(readlink -f $0))
+source="$(dirname "$(readlink -f "$0")")"
 target=$1
 
 # Read the settings
 INIFILE="${source}/${INIFILE}"
+if [[ ! -f "${INIFILE}" ]]; then
+   echo "[-] Could not find ${INIFILE}: required as it contains installer setings"
+   exit 1
+fi
 echo "Reading settings from ${INIFILE}"
-source ${INIFILE}
+# shellcheck disable=SC1090
+source "${INIFILE}"
 
 usage() {
     # Check whether the script is being executed from within the source directory
@@ -93,9 +99,9 @@ usage() {
 copy_files() {
     # Copy files
     for targetdirectory in "${!copyfiles[@]}"; do
-        mkdir -p ${target}/${targetdirectory}/ &>/dev/null
+        mkdir -p "${target}/${targetdirectory}/" &>/dev/null
         for file in ${copyfiles[$targetdirectory]}; do
-            cp -uv ${source}/${targetdirectory}/${file} ${target}/${targetdirectory}/${file}
+            cp -uv "${source}/${targetdirectory}/${file}" "${target}/${targetdirectory}/${file}"
         done
     done
 }
@@ -103,9 +109,9 @@ copy_files() {
 link_files() {
     # Link files
     for targetdirectory in "${!linkfiles[@]}"; do
-        mkdir -p ${target}/${targetdirectory}/ &>/dev/null
+        mkdir -p "${target}/${targetdirectory}/" &>/dev/null
         for file in ${linkfiles[$targetdirectory]}; do
-            ln -fv ${source}/${targetdirectory}/${file} ${target}/${targetdirectory}/${file}
+            ln -fv "${source}/${targetdirectory}/${file}" "${target}/${targetdirectory}/${file}"
         done
     done
     }
@@ -114,8 +120,8 @@ link_os_files() {
     # Link operating-system specific files
     for targetdirectory in "${!osfiles[@]}"; do
         for file in ${osfiles[$targetdirectory]}; do
-            if [[ -f ${source}/${os}/${file} ]]; then
-                ln -fv ${source}/${os}/${targetdirectory}/${file} ${target}/${targetdirectory}/${file}
+            if [[ -f "${source}/${os}/${file}" ]]; then
+                ln -fv "${source}/${os}/${targetdirectory}/${file}" "${target}/${targetdirectory}/${file}"
             fi
         done
     done
@@ -124,8 +130,9 @@ link_os_files() {
 check_executables() {
     # Check if executables are available
     echo "[*] Checking whether executables can be found..."
+    # shellcheck disable=SC2154
     for executable in ${executables}; do
-        if [[ -z "$(which ${executable} 2>/dev/null)" ]] ; then
+        if ! which "${executable}" &>/dev/null; then
             echo "[!] Could not find ${executable} in paths: Not everything might work correctly"
             WARNING=1
         fi
