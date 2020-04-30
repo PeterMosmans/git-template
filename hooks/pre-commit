@@ -14,14 +14,14 @@ declare -A verifiers
 
 # These are the default verifiers:
 verifiers=(
-    ["formatting"]="prettier;.*;--check"
     ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
     ["Jinja"]="lint-jinja;\.(j2|yaml|yml)$"
     ["Python"]="pylint;\.py;;pylint-exit;--error-fail $?"
-    ["reStructuredText"]="doc8; \.(rest|rst)$"
-    ["shell"]="shellcheck;\.(bash|.sh)$"
     ["XML"]="xmllint;\.xml$"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
+    ["formatting"]="prettier;.*;--check"
+    ["reStructuredText"]="doc8;\.(rest|rst)$"
+    ["shell"]="shellcheck;\.(bash|sh)$"
 )
 
 # Search in the git root for the INIFILE
