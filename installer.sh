@@ -68,27 +68,32 @@ declare -A osfiles
 # A warning will be shown if any of the files cannot be found (on the search paths)
 
 # shellcheck disable=SC2034
-VERSION=1.1
+VERSION=1.2
 
 os=$(uname -o|sed "s/\//-/")
 source="$(dirname "$(readlink -f "$0")")"
 target=$1
 
-# Read the settings
-INIFILE="${source}/${INIFILE}"
-if [[ ! -f "${INIFILE}" ]]; then
-   echo "[-] Could not find ${INIFILE}: required as it contains installer setings"
-   exit 1
-fi
-echo "Reading settings from ${INIFILE}"
-# shellcheck disable=SC1090
-source "${INIFILE}"
+
+read_settings() {
+    # Read the settings
+    INIFILE="${source}/${INIFILE}"
+    if [[ ! -f "${INIFILE}" ]]; then
+        echo "[-] Could not find ${INIFILE}: required as it contains installer setings"
+        exit 1
+    fi
+    echo "[*] Reading settings from ${INIFILE}"
+    # shellcheck disable=SC1090
+    source "${INIFILE}"
+}
 
 usage() {
     # Check whether the script is being executed from within the source directory
     if [ -z "$target" ]; then
         target=$(readlink -f .)
         if [ "${target}" == "${source}" ]; then
+            echo "installer.sh v${VERSION} - a generic installer script - PGCM - support@go-forward.net"
+            echo
             echo "Usage: installer.sh [TARGET]"
             echo "       or run from within target directory"
             exit
@@ -148,8 +153,9 @@ finish() {
     fi
 }
 
-echo "[*] Installing..."
 usage
+read_settings
+echo "[*] Installing..."
 copy_files
 link_files
 link_os_files
