@@ -15,7 +15,7 @@ declare -A verifiers
 # These are the default verifiers:
 verifiers=(
     ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
-    ["Jinja"]="lint-jinja;\.(j2|yaml|yml)$"
+    ["Jinja"]="lintjinja;\.(j2|yaml|yml)$"
     ["Python"]="pylint;\.py;;pylint-exit;--error-fail $?"
     ["XML"]="xmllint;\.xml$"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
