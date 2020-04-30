@@ -125,7 +125,11 @@ verify_file() {
 verify_files() {
     # Loop through each of the files and apply the verifiers
     for file in $(git diff --cached --name-only "${against}"); do
-        verify_file "$file"
+        if [[ -f "$file" ]]; then
+            verify_file "$file"
+        else
+            echo "$file has been removed or renamed this commit"
+        fi
     done
 }
 
