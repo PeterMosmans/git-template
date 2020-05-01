@@ -8,7 +8,7 @@ declare -A verifiers
 
 # Example:
 # verifiers=(
-#     ["description"]="binary;regular expression matching filetypes;prefix flags;post commands; post flags"
+#     ["description"]="binary;regular expression matching filetypes;prefix flags"
 #     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
 # )
 
@@ -16,11 +16,11 @@ declare -A verifiers
 verifiers=(
     ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
     ["Jinja"]="lintjinja;\.(j2|yaml|yml)$"
-    ["Python"]="pylint;\.py;;pylint-exit;--error-fail $?"
+    ["Python"]="pylint;\.py$;--errors-only"
     ["XML"]="xmllint;\.xml$"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
     ["formatting"]="prettier;.*;--check"
-    ["reStructuredText"]="doc8;\.(rest|rst)$"
+    ["reStructuredText"]="doc8;\.(rest|rst)$;--ignore D001"
     ["shell"]="shellcheck;\.(bash|sh)$"
 )
 
@@ -97,19 +97,8 @@ verify_file() {
         binary="$(echo "${verifiers[$verifier]}"|cut -d';' -f1)"
         regexp="$(echo "${verifiers[$verifier]}"|cut -d';' -f2)"
         flags="$(echo "${verifiers[$verifier]}"|cut -d';' -f3)"
-        post="$(echo "${verifiers[$verifier]}"|cut -d';' -f4)"
-        if [[ -n $post ]]; then
-            # Check whether post binary exists
-            if ! which "$post" &>/dev/null; then
-                echo "Could not find $post, removing $verifier verifier"
-                unset verifiers["$verifier"]
-                break
-            fi
-            # If a post binary has been set, use post parameters
-            post="|| $post $(echo "${verifiers[$verifier]}"|cut -d';' -f5)"
-        fi
         if [[ "$1" =~ ${regexp} ]]; then
-            echo "Verifying $verifier of $1"
+            echo "Verifying $verifier of $1 using $binary $flags"
             # Check whether binary exists
             if ! which "$binary" &>/dev/null; then
                 echo "Could not find $binary, removing $verifier verifier"
