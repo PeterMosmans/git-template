@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.0.0](https://github.com/PeterMosmans/git-template/compare/v2.1.0...v3.0.0) (2020-05-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **pre-commit:** jinja-lint was not a valid Python name.
+
+### Features
+
+* remove post commands and flags ([e748bd4](https://github.com/PeterMosmans/git-template/commit/e748bd4e6ccfc288fd6a03f4c42978f8ecd3b744))
+* **installer:** update installer script ([1ece7fe](https://github.com/PeterMosmans/git-template/commit/1ece7fe892313b7c8c6fffe487d6b23b7e26f586))
+* **pre-commit:** rename jinjalint ([3b0a44c](https://github.com/PeterMosmans/git-template/commit/3b0a44cd56de6f4de1902dd9e165a66b9a46b3a5))
+
+
+### Bug Fixes
+
+* **installer:** ensure all variables are properly quoted ([716acd2](https://github.com/PeterMosmans/git-template/commit/716acd29c11d92cd9b4300a0a9e3710d1f492ddb))
+* **pre-commit:** check if file still exists before verifying ([65ad5a2](https://github.com/PeterMosmans/git-template/commit/65ad5a2419fe8820eff306f6092e3eed98599150))
+* **pre-commit:** ensure correct quotes are used ([68b5ec8](https://github.com/PeterMosmans/git-template/commit/68b5ec8c6e9525b9eda65745a72fed78a283eb09))
+* **pre-commit:** ensure shell filenames are properly matched ([7d1da2c](https://github.com/PeterMosmans/git-template/commit/7d1da2c75b31083178fba03dab1597d7d7fcd876))
+* **pre-commit:** properly quote variables to prevent globbing ([9bc89d0](https://github.com/PeterMosmans/git-template/commit/9bc89d08f34b9c05e7b1d6508c01145a05b45cf8))
+
 ## [2.1.0](https://github.com/PeterMosmans/git-template/compare/v2.0.1...v2.1.0) (2020-04-28)
 
 
