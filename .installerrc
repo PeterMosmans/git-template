@@ -1,6 +1,6 @@
 # Files to copy
 copyfiles=(
-    ["."]=".commitlintrc.yml .gitlint .prettierignore .prettierrc.yml .versionrc .yamllint.yml"
+    ["."]=".commitlintrc.yml .gitlint .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
     [".git/hooks"]="commit-msg pre-commit"
 )
 

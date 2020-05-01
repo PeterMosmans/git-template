@@ -20,7 +20,7 @@ verifiers=(
     ["XML"]="xmllint;\.xml$"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
     ["formatting"]="prettier;.*;--check"
-    ["reStructuredText"]="doc8;\.(rest|rst)$;--ignore D001"
+    ["reStructuredText"]="doc8;\.(rest|rst)$;-q"
     ["shell"]="shellcheck;\.(bash|sh)$"
 )
 
