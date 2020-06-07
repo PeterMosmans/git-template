@@ -18,6 +18,7 @@ verifiers=(
     ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
     ["Jinja"]="lintjinja;\.(j2|yaml|yml)$"
     ["Python"]="pylint;\.py$;--errors-only"
+    ["Python formatting"]="black;\.py$;--check --diff"
     ["XML"]="xmllint;\.xml$"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
     ["formatting"]="prettier;^((?!^Jenkinsfile).)*$;--check"
