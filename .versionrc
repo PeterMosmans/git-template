@@ -1,5 +1,6 @@
 {
   "header": "# Changelog\n",
+  "tag-prefix": "",
   "types": [
     {
       "type": "feat",
