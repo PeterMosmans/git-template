@@ -1,5 +1,8 @@
 {
   "header": "# Changelog\n",
+  "scripts": {
+    "postchangelog": "prettier --write CHANGELOG.md"
+  },
   "tag-prefix": "",
   "types": [
     {
