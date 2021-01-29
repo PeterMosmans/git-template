@@ -9,5 +9,3 @@
 # exit when any command fails
 set -e
 commitlint -e $1
-gitlint --msg-filename $1
-#cz check --commit-msg-file $1
