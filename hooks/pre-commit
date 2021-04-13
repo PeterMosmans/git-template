@@ -17,9 +17,9 @@ verifiers=(
     ["Groovy"]="npm-groovy-lint;^Jenkinsfile;--failonerror --noserver --no-insight -l warning"
     ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
     ["Jinja"]="lintjinja;\.(j2|yaml|yml)$"
-    ["Python formatting"]="black;\.py$;--check --diff"
     ["Python"]="pylint;\.py$;--errors-only"
-    ["XML"]="xmllint;\.xml$;--noout"
+    ["Python formatting"]="black;\.py$;--check --diff"
+    ["XML"]="xmllint;\.xml$"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
     ["formatting"]="prettier;^((?!^Jenkinsfile).)*$;--check"
     ["reStructuredText"]="doc8;\.(rest|rst)$;-q"
@@ -114,11 +114,13 @@ verify_file() {
 }
 
 verify_files() {
-    # Loop through each of the staged files and apply the verifiers
-    # Skip the deleted files
-    # shellcheck disable=SC2066
-    for file in "$(git diff --cached --name-only --diff-filter=d "${against}")"; do
-        verify_file "$file"
+    # Loop through each of the files and apply the verifiers
+    for file in $(git diff --cached --name-only "${against}"); do
+        if [[ -f "$file" ]]; then
+            verify_file "$file"
+        else
+            echo "$file has been removed or renamed this commit"
+        fi
     done
 }
 
