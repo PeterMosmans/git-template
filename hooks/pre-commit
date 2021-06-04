@@ -17,8 +17,8 @@ verifiers=(
     ["Groovy"]="npm-groovy-lint;^Jenkinsfile;--failonerror --noserver --no-insight -l warning"
     ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
     ["Jinja"]="lintjinja;\.(j2|yaml|yml)$"
-    ["Python"]="pylint;\.py$;--errors-only"
     ["Python formatting"]="black;\.py$;--check --diff"
+    ["Python"]="pylint;\.py$;--errors-only"
     ["XML"]="xmllint;\.xml$"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
     ["formatting"]="prettier;^((?!^Jenkinsfile).)*$;--check"
@@ -115,12 +115,9 @@ verify_file() {
 
 verify_files() {
     # Loop through each of the files and apply the verifiers
-    for file in $(git diff --cached --name-only "${against}"); do
-        if [[ -f "$file" ]]; then
+    git diff --cached --diff-filter=d --name-only -z "${against}" |
+        while read -d $'\0' file; do
             verify_file "$file"
-        else
-            echo "$file has been removed or renamed this commit"
-        fi
     done
 }
 
