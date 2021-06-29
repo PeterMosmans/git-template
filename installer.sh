@@ -14,7 +14,6 @@
 INIFILE=.installerrc
 
 # Define associative arrays
-declare -A commitfiles
 declare -A copyfiles
 declare -A linkfiles
 declare -A osfiles
@@ -134,23 +133,27 @@ link_os_files() {
 
 check_executables() {
     # Check if executables are available
-    echo "[*] Checking whether executables can be found..."
     # shellcheck disable=SC2154
-    for executable in ${executables}; do
-        if ! which "${executable}" &>/dev/null; then
-            echo "[!] Could not find ${executable} in paths: Not everything might work correctly"
-            WARNING=1
-        fi
-    done
+    if [[ -n ${executables} ]]; then
+        echo "[*] Checking whether executables can be found..."
+        # shellcheck disable=SC2154
+        for executable in ${executables}; do
+            if ! which "${executable}" &>/dev/null; then
+                echo "[!] Could not find ${executable} in paths: Not everything might work correctly"
+                WARNING=1
+            fi
+        done
+    fi
 }
 
 commit_files() {
     # Commit files
-    if [ ${#commitfiles[@]} -ge 1 ]; then
-        for file in "${commitfiles[@]}"; do
-            git add "$file"
+    # Only continue if git status is clean
+    if [[ -z "$(git status --untracked-files=no --porcelain)" ]]; then
+        # shellcheck disable=SC2154
+        for commitfile in ${commitfiles}; do
+            git add "$commitfile"
         done
-        git status
         git commit -m "feat(ci): add dotfiles"
     fi
 }
