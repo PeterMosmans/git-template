@@ -14,10 +14,10 @@
 INIFILE=.installerrc
 
 # Define associative arrays
+declare -A commitfiles
 declare -A copyfiles
 declare -A linkfiles
 declare -A osfiles
-
 
 
 # The file .installerrc should contain all installer-specific files:
@@ -68,7 +68,7 @@ declare -A osfiles
 # A warning will be shown if any of the files cannot be found (on the search paths)
 
 # shellcheck disable=SC2034
-VERSION=1.2
+VERSION=1.3
 
 os=$(uname -o|sed "s/\//-/")
 source="$(dirname "$(readlink -f "$0")")"
@@ -144,6 +144,17 @@ check_executables() {
     done
 }
 
+commit_files() {
+    # Commit files
+    if [ ${#commitfiles[@]} -ge 1 ]; then
+        for file in "${commitfiles[@]}"; do
+            git add "$file"
+        done
+        git status
+        git commit -m "feat(ci): add dotfiles"
+    fi
+}
+
 finish() {
     if [[ -n "$WARNING" ]]; then
         echo "[!] Done, but with warnings"
@@ -160,4 +171,5 @@ copy_files
 link_files
 link_os_files
 check_executables
+commit_files
 finish
