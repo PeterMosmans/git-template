@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.2.0](https://github.com/PeterMosmans/git-template/compare/3.1.0...3.2.0) (2021-06-29)
+
+### Features
+
+- add files to commit to pristine repository
+  ([ccb0fec](https://github.com/PeterMosmans/git-template/commit/ccb0fec4271c43f8e6252c86db991a5b292204fb))
+- check whether list is empty before displaying status
+  ([4328b8f](https://github.com/PeterMosmans/git-template/commit/4328b8f2ad42b8e9242caf86025bcfa9e5fd22d6))
+- update installer to add and commit files
+  ([5b9d53b](https://github.com/PeterMosmans/git-template/commit/5b9d53bac3a25a5f7f93c6b22075810e12f53107))
+- update prettier ruleset
+  ([78586a0](https://github.com/PeterMosmans/git-template/commit/78586a03f8aea58697cda3e6e67ccb3e416c0484))
+
+### Bug Fixes
+
+- ensure that filenames are properly quoted
+  ([a4f38fa](https://github.com/PeterMosmans/git-template/commit/a4f38faca46c92b885f77d9e8858f15d9e71d109))
+- ensure that spaces in filenames are properly handled
+  ([69bf77f](https://github.com/PeterMosmans/git-template/commit/69bf77fd4c402ba988d8d4652a005455050bad5b))
+- ensure that xmllint no output shows
+  ([fa4a3be](https://github.com/PeterMosmans/git-template/commit/fa4a3be65e1c9ff9ffa12109258cf16cb4a1fa8b))
+
 ## [3.1.0](https://github.com/PeterMosmans/git-template/compare/v3.0.0...v3.1.0) (2021-04-13)
 
 ### Features
