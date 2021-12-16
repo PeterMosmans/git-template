@@ -1,17 +1,30 @@
 # Files to copy
-copyfiles=(
+COPYFILES=(
     ["."]=".commitlintrc.yml .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
     [".git/hooks"]="commit-msg pre-commit"
 )
 
 # OS-independent files to link
-# linkfiles=()
+# LINKFILES=()
 
 # Files to link, depending on OS
-# osfiles=()
+# OSFILES=()
 
 # Files to stage / commit
-commitfiles=".commitlintrc.yml .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
+COMMITFILES=".commitlintrc.yml .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
 
 # executables: Files that should be on the search path and accessible
-executables="doc8 lint-jenkins lint-jinja prettier shellcheck"
+EXECUTABLES="doc8 lint-jenkins lint-jinja prettier shellcheck"
+
+# Files that will be removed from the target directory
+CLEANUPFILES=
+
+# When set to true, ensure that a git repository is initialized at the target
+GIT_INIT=true
+
+# When set to true, generate (and commit) SOURCEVERSION, containing the source's git information
+# GIT_SOURCE_TAG=true
+
+# Location of git initialization script
+GIT_INSTALLER=
+
