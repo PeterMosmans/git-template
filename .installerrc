@@ -1,6 +1,6 @@
 # Files to copy
 COPYFILES=(
-    ["."]=".commitlintrc.yml .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
+    ["."]=".commitlintrc.yml .gitignore .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
     [".git/hooks"]="commit-msg pre-commit"
 )
 
@@ -11,7 +11,8 @@ COPYFILES=(
 # OSFILES=()
 
 # Files to stage / commit
-COMMITFILES=".commitlintrc.yml .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
+#COMMITFILES=".commitlintrc.yml .prettierignore .prettierrc.yml .versionrc .yamllint.yml doc8.ini"
+COMMITFILES=
 
 # executables: Files that should be on the search path and accessible
 EXECUTABLES="doc8 lint-jenkins lint-jinja prettier shellcheck"
