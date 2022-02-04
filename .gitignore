@@ -1,0 +1,6 @@
+# Ignore all dotfiles
+.*
+# Ignore Emacs temporary files
+.#.*
+# Ignore doc8 configuration file
+doc8.ini
