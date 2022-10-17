@@ -18,7 +18,7 @@ verifiers=(
     ["Jenkinsfile"]="lint-jenkins;^Jenkinsfile"
     ["Jinja"]="lintjinja;\.(j2|yaml|yml)$"
     ["Python formatting"]="black;\.py$;--check --diff"
-    ["Python"]="pylint;\.py$;--errors-only"
+    ["Python"]="python $(which pylint);\.py$;--errors-only"
     ["XML"]="xmllint;\.xml$;--noout"
     ["YAML"]="yamllint;\.(yaml|yml)$;--strict"
     ["formatting"]="prettier;^((?!^Jenkinsfile).)*$;--check"
@@ -77,30 +77,15 @@ check_branch() {
     fi
 }
 
-check_verifiers() {
-    # Check whether binaries are available
-    for verifier in "${!verifiers[@]}"; do
-        binary="$(echo "${verifiers[$verifier]}"|cut -d';' -f1)"
-        post="$(echo "${verifiers[$verifier]}"|cut -d';' -f4)"
-        if ! which "$binary" &>/dev/null; then
-            echo "Could not find $binary, removing $verifier verifier"
-            unset verifiers["$verifier"]
-        fi
-        if [[ -n $post ]] && ! which "$post" &>/dev/null; then
-           echo "Could not find $post, removing $verifier verifier"
-           unset verifiers["$verifier"]
-        fi
-    done
-}
-
 verify_file() {
     # Loop through each verifier and apply if it matches its regexp
     for verifier in "${!verifiers[@]}"; do
-        binary="$(echo "${verifiers[$verifier]}"|cut -d';' -f1)"
+        command="$(echo "${verifiers[$verifier]}"|cut -d';' -f1)"
+        binary="$(echo "$command" | awk '{print $1}')"
         regexp="$(echo "${verifiers[$verifier]}"|cut -d';' -f2)"
         flags="$(echo "${verifiers[$verifier]}"|cut -d';' -f3)"
         if [[ "$1" =~ ${regexp} ]]; then
-            echo "Verifying $verifier of $1 using $binary $flags"
+            echo "Verifying $verifier of $1 using $command $flags"
             # Check whether binary exists
             if ! which "$binary" &>/dev/null; then
                 echo "Could not find $binary, removing $verifier verifier"
@@ -108,7 +93,7 @@ verify_file() {
                 break
             fi
             # shellcheck disable=SC2086
-            $binary $flags "$1" $post
+            $command $flags "$1"
         fi
     done
 }
@@ -116,12 +101,11 @@ verify_file() {
 verify_files() {
     # Loop through each of the files and apply the verifiers
     git diff --cached --diff-filter=d --name-only -z "${against}" |
-        while read -d $'\0' file; do
+        while read -r -d $'\0' file; do
             verify_file "$file"
     done
 }
 
-#check_verifiers
 check_branch
 verify_files
 
